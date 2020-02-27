@@ -49,22 +49,26 @@ function addPokemon(e) {
   const trainerId = e.target.dataset.trainerId;
   const trainerCardUl = e.target.nextElementSibling;
 
-  let config = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json"
-    },
-    body: JSON.stringify({ trainer_id: trainerId })
-  };
+  if (trainerCardUl.childElementCount <= 5) {
+    let config = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({ trainer_id: trainerId })
+    };
 
-  fetch(POKEMONS_URL, config)
-    .then(resp => resp.json())
-    .then(pokemon => {
-      let pokemonElmt = createPokemon(pokemon);
-      trainerCardUl.innerHTML += pokemonElmt;
-    })
-    .catch(error => console.log(error));
+    fetch(POKEMONS_URL, config)
+      .then(resp => resp.json())
+      .then(pokemon => {
+        let pokemonElmt = createPokemon(pokemon);
+        trainerCardUl.innerHTML += pokemonElmt;
+      })
+      .catch(error => console.log(error));
+  } else {
+    console.log("No More Space");
+  }
 }
 
 function createPokemon(pokemon) {

@@ -15,11 +15,12 @@ function addTrainerToDom(obj) {
     let template = createTemplate(trainer);
     mainTag.innerHTML += template;
   }
-
+  const ulTags = document.querySelectorAll(".card ul");
   const addPokemonBtns = document.querySelectorAll(".card p + button");
   const releaseBtn = document.querySelectorAll(".card .release");
+  ulTags.forEach(ul => ul.addEventListener("click", releasePokemon));
   addPokemonBtns.forEach(btn => btn.addEventListener("click", addPokemon));
-  releaseBtn.forEach(btn => btn.addEventListener("click", releasePokemon));
+  //   releaseBtn.forEach(btn => btn.addEventListener("click", releasePokemon));
 }
 
 function createPokemonDomElements(pokemonArry) {
@@ -49,7 +50,7 @@ function addPokemon(e) {
   const trainerId = e.target.dataset.trainerId;
   const trainerCardUl = e.target.nextElementSibling;
 
-  if (trainerCardUl.childElementCount <= 5) {
+  if (trainerCardUl.childElementCount < 6) {
     let config = {
       method: "POST",
       headers: {
@@ -66,8 +67,6 @@ function addPokemon(e) {
         trainerCardUl.innerHTML += pokemonElmt;
       })
       .catch(error => console.log(error));
-  } else {
-    console.log("No More Space");
   }
 }
 
@@ -80,14 +79,16 @@ function createPokemon(pokemon) {
 }
 
 function releasePokemon(e) {
-  const pokemon = e.target.parentElement;
-  const pokemonID = e.target.dataset.pokemonId;
+  if (e.target.className == "release") {
+    const pokemon = e.target.parentElement;
+    const pokemonID = e.target.dataset.pokemonId;
 
-  fetch(`${POKEMONS_URL}/${pokemonID}`, { method: "DELETE" });
-  // .then(resp => resp.json())
-  // .then(obj => console.log(obj));
+    fetch(`${POKEMONS_URL}/${pokemonID}`, { method: "DELETE" });
+    // .then(resp => resp.json())
+    // .then(obj => console.log(obj));
 
-  pokemon.remove();
+    pokemon.remove();
+  }
 }
 
 beginFetch();
